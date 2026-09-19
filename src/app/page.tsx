@@ -680,11 +680,15 @@ function QRDesbloqueo() {
 
   if (desbloqueado) {
     return (
-      <div className="flex flex-col items-center gap-3 py-4">
+      <div className="flex flex-col items-center gap-3 py-4 w-full">
         <span className="text-3xl">🎁</span>
-        <p className="text-[#f0edf2] text-sm text-center leading-relaxed">
-          {/* contenido regalo virtual desbloqueado */}
-        </p>
+        <a
+          href="/Bono de mi Bebé.pdf"
+          download="Bono de mi Bebé.pdf"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold text-white transition-all active:scale-95"
+          style={{ backgroundColor: "#e53e3e", boxShadow: "0 0 16px rgba(229,62,62,0.4)" }}>
+          <span>🎀</span> Descargar bono
+        </a>
       </div>
     )
   }
@@ -870,13 +874,6 @@ function RouletteWheel() {
               minHeight: "35vh",
             }}>
             <QRDesbloqueo />
-            <a
-              href="/Bono de mi Bebé.pdf"
-              download="Bono de mi Bebé.pdf"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold text-white transition-all active:scale-95"
-              style={{ backgroundColor: "#e53e3e", boxShadow: "0 0 16px rgba(229,62,62,0.4)" }}>
-              <span>🎀</span> Descargar bono
-            </a>
           </div>
 
         </div>
