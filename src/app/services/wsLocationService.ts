@@ -1,4 +1,4 @@
-const WS_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/^http/, "ws")
+const WS_URL = "https://backend-daa-mja-production.up.railway.app".replace(/^http/, "ws")
 
 export type LocationState = {
   conectado: boolean

@@ -636,7 +636,7 @@ function Screen6({ onNext, onBack, theme }: { onNext: () => void; onBack: () => 
 }
 
 // ─── Roulette ─────────────────────────────────────────────────────────────────
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"
+const API_URL = "https://backend-daa-mja-production.up.railway.app"
 
 const OPCIONES_FISICO = [
   { label: "Regalo físico", titulo: "Por definir" },
