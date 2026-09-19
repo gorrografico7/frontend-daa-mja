@@ -1034,6 +1034,7 @@ function Screen8({ onBack, onEditFecha, theme }: { onBack: () => void; onEditFec
 
   return (
     <div className="relative flex flex-col items-center gap-5 z-10">
+      <RouletteWheel />
       {fecha && (
         <div className="text-center">
           <p className="text-[#f0edf2]/40 text-xs tracking-widest uppercase mb-1">Entrega del regalo físico</p>
@@ -1041,7 +1042,6 @@ function Screen8({ onBack, onEditFecha, theme }: { onBack: () => void; onEditFec
           <p className="text-[#e53e3e] text-2xl font-bold mt-0.5">{fecha.hora}</p>
         </div>
       )}
-      <RouletteWheel />
       <div className="flex flex-col items-center gap-3 w-full">
         <button
           onClick={onEditFecha}
