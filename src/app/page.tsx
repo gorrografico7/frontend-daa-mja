@@ -860,6 +860,13 @@ function RouletteWheel() {
               border: "1px solid rgba(255,255,255,0.08)",
             }}>
             <MapaRegalo />
+            <a
+              href="/Bono de mi Bebé.pdf"
+              download="Bono de mi Bebé.pdf"
+              className="mt-3 flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold text-white transition-all active:scale-95"
+              style={{ backgroundColor: "#e53e3e", boxShadow: "0 0 16px rgba(229,62,62,0.4)" }}>
+              <span>🎀</span> Descargar bono
+            </a>
           </div>
           <div
             className="rounded-2xl w-full items-center justify-center"
