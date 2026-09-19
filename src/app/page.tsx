@@ -320,10 +320,11 @@ function FloatingPhotos() {
     resize()
     window.addEventListener('resize', resize)
 
-    const images: (HTMLImageElement & { crop?: ReturnType<typeof detectCrop> })[] = []
+    type ImgWithCrop = HTMLImageElement & { crop?: ReturnType<typeof detectCrop> }
+    const images: ImgWithCrop[] = []
     let loaded = 0
     PHOTO_FILES.forEach((name, i) => {
-      const img = new window.Image()
+      const img = new window.Image() as ImgWithCrop
       img.onload = () => { img.crop = detectCrop(img); images[i] = img; loaded++ }
       img.src = `/fotos/${name}`
     })
@@ -725,7 +726,7 @@ function RouletteWheel() {
   const [opcionActiva, setOpcionActiva] = useState<number | null>(null)
   const angleRef = useRef(0)
   const velRef = useRef(0)
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number>(0)
 
   useEffect(() => {
     fetch(`${API_URL}/ruleta`)
