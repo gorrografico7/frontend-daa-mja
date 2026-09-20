@@ -1113,15 +1113,9 @@ export default function Page() {
         {screen === 2 && <Screen3 onNext={() => navigate(3)} onBack={() => navigate(1)} theme={theme} />}
         {screen === 3 && <Screen4 onNext={() => navigate(4)} onBack={() => navigate(2)} theme={theme} />}
         {screen === 4 && <Screen5 onNext={() => navigate(5)} onBack={() => navigate(3)} theme={theme} />}
-        {screen === 5 && <Screen6 onNext={async () => {
-          try {
-            const d = await fetch(`${API_URL}/fecha-entrega`).then(r => r.json())
-            if (d.fecha) { setFechaConfirmada(true); navigate(7) }
-            else { setFechaConfirmada(false); navigate(6) }
-          } catch { navigate(fechaConfirmada ? 7 : 6) }
-        }} onBack={() => navigate(4)} theme={theme} />}
-        {screen === 6 && <Screen7 onNext={() => { setFechaConfirmada(true); navigate(7) }} onBack={() => navigate(5)} theme={theme} />}
-        {screen === 7 && <Screen8 onBack={() => navigate(fechaConfirmada ? 5 : 6)} onEditFecha={() => navigate(6)} theme={theme} />}
+        {screen === 5 && <Screen6 onNext={() => navigate(6)} onBack={() => navigate(4)} theme={theme} />}
+        {screen === 6 && <Screen8 onBack={() => navigate(5)} onEditFecha={() => navigate(7)} theme={theme} />}
+        {screen === 7 && <Screen7 onNext={() => { setFechaConfirmada(true); navigate(6) }} onBack={() => navigate(6)} theme={theme} />}
       </div>
     </div>
   )
