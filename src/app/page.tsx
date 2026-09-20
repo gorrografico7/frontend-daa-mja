@@ -720,14 +720,12 @@ const ROULETTE_ITEMS = [
 ]
 const ROULETTE_COLORS = ["#e53e3e", "#b91c1c", "#ef4444", "#991b1b", "#f87171", "#7f1d1d", "#fca5a5", "#c53030"]
 
-function RouletteWheel() {
+function RouletteWheel({ onNext }: { onNext?: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [spinning, setSpinning] = useState(false)
   const [result, setResult] = useState<string | null>(null)
   const [yaGirada, setYaGirada] = useState(false)
   const [loadingEstado, setLoadingEstado] = useState(true)
-  const [tabActiva, setTabActiva] = useState<"fisico" | "virtual">("fisico")
-  const [opcionActiva, setOpcionActiva] = useState<number | null>(null)
   const angleRef = useRef(0)
   const velRef = useRef(0)
   const rafRef = useRef<number>(0)
@@ -829,53 +827,15 @@ function RouletteWheel() {
         </button>
       )}
 
-      {yaGirada && (
-        <div className="w-72 flex flex-col gap-3">
-          <div className="flex gap-2 p-1 rounded-full" style={{ backgroundColor: "rgba(229,62,62,0.15)", border: "1px solid rgba(229,62,62,0.2)" }}>
-            <button
-              onClick={() => { setTabActiva("fisico"); setOpcionActiva(null) }}
-              className="flex-1 py-2 rounded-full text-sm font-semibold transition-all duration-300"
-              style={{
-                backgroundColor: tabActiva === "fisico" ? "#e53e3e" : "transparent",
-                color: tabActiva === "fisico" ? "#fff" : "rgba(255,255,255,0.45)",
-                boxShadow: tabActiva === "fisico" ? "0 0 16px rgba(229,62,62,0.5)" : "none",
-                transform: tabActiva === "fisico" ? "scale(1.03)" : "scale(1)",
-              }}>
-              Regalo físico
+      {yaGirada && !spinning && (
+        <div className="w-72 flex flex-col items-center gap-3">
+          <p className="text-[#f0edf2] text-center text-sm">🎉 ¡Ganaste: <strong>{result ?? "Ambas"}</strong>!</p>
+          {onNext && (
+            <button onClick={onNext} style={{ backgroundColor: '#e53e3e' }}
+              className="w-full py-3.5 rounded-xl text-white text-sm font-semibold active:scale-95 transition-all">
+              Ver mis regalos →
             </button>
-            <button
-              onClick={() => { setTabActiva("virtual"); setOpcionActiva(null) }}
-              className="flex-1 py-2 rounded-full text-sm font-semibold transition-all duration-300"
-              style={{
-                backgroundColor: tabActiva === "virtual" ? "#e53e3e" : "transparent",
-                color: tabActiva === "virtual" ? "#fff" : "rgba(255,255,255,0.45)",
-                boxShadow: tabActiva === "virtual" ? "0 0 16px rgba(229,62,62,0.5)" : "none",
-                transform: tabActiva === "virtual" ? "scale(1.03)" : "scale(1)",
-              }}>
-              Regalo virtual
-            </button>
-          </div>
-          {/* Contenido por tab */}
-          <div
-            className="rounded-2xl w-full p-3"
-            style={{
-              display: tabActiva === "fisico" ? "block" : "none",
-              backgroundColor: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}>
-            <MapaRegalo />
-          </div>
-          <div
-            className="rounded-2xl w-full flex-col items-center justify-center gap-4 p-4"
-            style={{
-              display: tabActiva === "virtual" ? "flex" : "none",
-              backgroundColor: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              minHeight: "35vh",
-            }}>
-            <QRDesbloqueo />
-          </div>
-
+          )}
         </div>
       )}
     </div>
@@ -1015,7 +975,20 @@ function Screen7({ onNext, onBack, theme }: { onNext: () => void; onBack: () => 
   )
 }
 
-function Screen8({ onBack, onEditFecha, theme }: { onBack: () => void; onEditFecha: () => void; theme: Theme }) {
+function Screen8({ onBack, onNext, theme }: { onBack: () => void; onNext: () => void; theme: Theme }) {
+  return (
+    <div className="relative flex flex-col items-center gap-5 z-10">
+      <RouletteWheel onNext={onNext} />
+      <button onClick={onBack}
+        className="w-72 py-3 rounded-xl text-[#f0edf2] text-sm font-medium border border-white/20 hover:border-white/40 active:scale-95 transition-all">
+        ← Atrás
+      </button>
+    </div>
+  )
+}
+
+function ScreenRegalos({ onBack, onEditFecha, theme }: { onBack: () => void; onEditFecha: () => void; theme: Theme }) {
+  const [tabActiva, setTabActiva] = useState<"fisico" | "virtual">("fisico")
   const [fecha, setFecha] = useState<{ fecha: string; hora: string } | null>(null)
 
   useEffect(() => {
@@ -1033,8 +1006,7 @@ function Screen8({ onBack, onEditFecha, theme }: { onBack: () => void; onEditFec
   })()
 
   return (
-    <div className="relative flex flex-col items-center gap-5 z-10">
-      <RouletteWheel />
+    <div className="relative flex flex-col items-center gap-5 z-10 w-full max-w-xs">
       {fecha && (
         <div className="text-center">
           <p className="text-[#f0edf2]/40 text-xs tracking-widest uppercase mb-1">Entrega del regalo físico</p>
@@ -1042,12 +1014,42 @@ function Screen8({ onBack, onEditFecha, theme }: { onBack: () => void; onEditFec
           <p className="text-[#e53e3e] text-2xl font-bold mt-0.5">{fecha.hora}</p>
         </div>
       )}
+      <div className="w-72 flex flex-col gap-3">
+        <div className="flex gap-2 p-1 rounded-full" style={{ backgroundColor: "rgba(229,62,62,0.15)", border: "1px solid rgba(229,62,62,0.2)" }}>
+          <button onClick={() => setTabActiva("fisico")}
+            className="flex-1 py-2 rounded-full text-sm font-semibold transition-all duration-300"
+            style={{
+              backgroundColor: tabActiva === "fisico" ? "#e53e3e" : "transparent",
+              color: tabActiva === "fisico" ? "#fff" : "rgba(255,255,255,0.45)",
+              boxShadow: tabActiva === "fisico" ? "0 0 16px rgba(229,62,62,0.5)" : "none",
+              transform: tabActiva === "fisico" ? "scale(1.03)" : "scale(1)",
+            }}>
+            Regalo físico
+          </button>
+          <button onClick={() => setTabActiva("virtual")}
+            className="flex-1 py-2 rounded-full text-sm font-semibold transition-all duration-300"
+            style={{
+              backgroundColor: tabActiva === "virtual" ? "#e53e3e" : "transparent",
+              color: tabActiva === "virtual" ? "#fff" : "rgba(255,255,255,0.45)",
+              boxShadow: tabActiva === "virtual" ? "0 0 16px rgba(229,62,62,0.5)" : "none",
+              transform: tabActiva === "virtual" ? "scale(1.03)" : "scale(1)",
+            }}>
+            Regalo virtual
+          </button>
+        </div>
+        <div className="rounded-2xl w-full p-3"
+          style={{ display: tabActiva === "fisico" ? "block" : "none", backgroundColor: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          <MapaRegalo />
+        </div>
+        <div className="rounded-2xl w-full flex-col items-center justify-center gap-4 p-4"
+          style={{ display: tabActiva === "virtual" ? "flex" : "none", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", minHeight: "35vh" }}>
+          <QRDesbloqueo />
+        </div>
+      </div>
       <div className="flex flex-col items-center gap-3 w-full">
-        <button
-          onClick={onEditFecha}
+        <button onClick={onEditFecha}
           className="w-72 py-3 rounded-xl text-sm font-medium active:scale-95 transition-all flex items-center justify-center gap-2"
-          style={{ backgroundColor: "rgba(229,62,62,0.12)", border: "1px solid rgba(229,62,62,0.35)", color: "#e53e3e" }}
-        >
+          style={{ backgroundColor: "rgba(229,62,62,0.12)", border: "1px solid rgba(229,62,62,0.35)", color: "#e53e3e" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
@@ -1064,7 +1066,7 @@ function Screen8({ onBack, onEditFecha, theme }: { onBack: () => void; onEditFec
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
-const SCREEN_THEMES = ["white", "yellow", "pink", "blue", "coffee", "red", "red", "red"]
+const SCREEN_THEMES = ["white", "yellow", "pink", "blue", "coffee", "red", "red", "red", "red"]
 
 export default function Page() {
   const [screen, setScreen] = useState(0)
@@ -1114,8 +1116,9 @@ export default function Page() {
         {screen === 3 && <Screen4 onNext={() => navigate(4)} onBack={() => navigate(2)} theme={theme} />}
         {screen === 4 && <Screen5 onNext={() => navigate(5)} onBack={() => navigate(3)} theme={theme} />}
         {screen === 5 && <Screen6 onNext={() => navigate(6)} onBack={() => navigate(4)} theme={theme} />}
-        {screen === 6 && <Screen8 onBack={() => navigate(5)} onEditFecha={() => navigate(7)} theme={theme} />}
-        {screen === 7 && <Screen7 onNext={() => { setFechaConfirmada(true); navigate(6) }} onBack={() => navigate(6)} theme={theme} />}
+        {screen === 6 && <Screen8 onBack={() => navigate(5)} onNext={() => navigate(8)} theme={theme} />}
+        {screen === 7 && <Screen7 onNext={() => { setFechaConfirmada(true); navigate(8) }} onBack={() => navigate(8)} theme={theme} />}
+        {screen === 8 && <ScreenRegalos onBack={() => navigate(6)} onEditFecha={() => navigate(7)} theme={theme} />}
       </div>
     </div>
   )
