@@ -1116,9 +1116,9 @@ export default function Page() {
         {screen === 3 && <Screen4 onNext={() => navigate(4)} onBack={() => navigate(2)} theme={theme} />}
         {screen === 4 && <Screen5 onNext={() => navigate(5)} onBack={() => navigate(3)} theme={theme} />}
         {screen === 5 && <Screen6 onNext={() => navigate(6)} onBack={() => navigate(4)} theme={theme} />}
-        {screen === 6 && <Screen8 onBack={() => navigate(5)} onNext={() => navigate(8)} theme={theme} />}
-        {screen === 7 && <Screen7 onNext={() => { setFechaConfirmada(true); navigate(8) }} onBack={() => navigate(8)} theme={theme} />}
-        {screen === 8 && <ScreenRegalos onBack={() => navigate(6)} onEditFecha={() => navigate(7)} theme={theme} />}
+        {screen === 6 && <Screen8 onBack={() => navigate(5)} onNext={() => navigate(7)} theme={theme} />}
+        {screen === 7 && <Screen7 onNext={() => { setFechaConfirmada(true); navigate(8) }} onBack={() => navigate(6)} theme={theme} />}
+        {screen === 8 && <ScreenRegalos onBack={() => navigate(7)} onEditFecha={() => navigate(7)} theme={theme} />}
       </div>
     </div>
   )
